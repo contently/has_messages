@@ -358,7 +358,7 @@ class MessageRepliedTest < ActiveSupport::TestCase
     @richard = create_user(:login => 'Richard')
     @ralph = create_user(:login => 'Ralph')
     
-    original_message = create_message(
+    @original_message = create_message(
       :subject => 'Hello',
       :body => 'How are you?',
       :sender => @admin,
@@ -366,7 +366,11 @@ class MessageRepliedTest < ActiveSupport::TestCase
       :cc => @richard,
       :bcc => @ralph
     )
-    @message = original_message.reply
+    @message = @original_message.reply
+  end
+  
+  def test_should_store_the_original_message
+    assert_equal @original_message, @message.original_message
   end
   
   def test_should_be_in_unsent_state
@@ -383,6 +387,11 @@ class MessageRepliedTest < ActiveSupport::TestCase
   
   def test_should_have_original_body
     assert_equal 'How are you?', @message.body
+  end
+  
+  def test_should_have_thread
+    second_reply = @message.reply
+    assert_equal [@message, @original_message], second_reply.thread
   end
   
   def test_should_use_same_sender

@@ -27,6 +27,7 @@
 # * +unhide+ - Makes the message visible again
 class Message < ActiveRecord::Base
   belongs_to  :sender, :polymorphic => true
+  belongs_to  :original_message, :class_name => 'Message'
   has_many    :recipients, :class_name => 'MessageRecipient', :order => 'kind DESC, position ASC', :dependent => :destroy
   
   validates_presence_of :state, :sender_id, :sender_type
@@ -99,7 +100,17 @@ class Message < ActiveRecord::Base
     message = self.class.new(:subject => subject, :body => body)
     message.sender = sender
     message.to(to)
+    message.original_message = self
     message
+  end
+  
+  # returns the message thread, i.e. the chain of replies
+  def thread
+    if original_message
+      [original_message] + original_message.thread
+    else
+      []
+    end
   end
   
   # Replies to all recipients on this message, including the original subject
