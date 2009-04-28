@@ -313,7 +313,7 @@ class MessageRecipientRepliedTest < ActiveSupport::TestCase
   def setup
     @erich = create_user(:login => 'Erich')
     @john = create_user(:login => 'John')
-    original_message = create_message(
+    @original_message = create_message(
       :subject => 'Hello',
       :body => 'How are you?',
       :to => @john,
@@ -321,10 +321,14 @@ class MessageRecipientRepliedTest < ActiveSupport::TestCase
       :bcc => create_user(:login => 'Ralph')
     )
     @recipient = create_message_recipient(
-      :message => original_message,
+      :message => @original_message,
       :receiver => @erich
     )
     @message = @recipient.reply
+  end
+  
+  def test_should_store_the_original_message
+    assert_equal @original_message, @message.original_message
   end
   
   def test_should_be_in_unsent_state

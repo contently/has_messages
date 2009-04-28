@@ -80,6 +80,7 @@ class MessageRecipient < ActiveRecord::Base
     message = self.message.class.new(:subject => subject, :body => body)
     message.sender = receiver
     message.to(sender)
+    message.original_message = self.message
     message
   end
   
