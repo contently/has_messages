@@ -70,3 +70,6 @@ end
 ActiveRecord::Base.class_eval do
   extend HasMessages::MacroMethods
 end
+
+require 'has_messages/models/message.rb'
+require 'has_messages/models/message_recipient.rb'
