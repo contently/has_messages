@@ -35,7 +35,7 @@ class Message < ActiveRecord::Base
   
   after_save :update_recipients
   
-  named_scope :visible, :conditions => {:hidden_at => nil}
+  scope :visible, :conditions => {:hidden_at => nil}
   
   # Define actions for the message
   state_machine :state, :initial => :unsent do

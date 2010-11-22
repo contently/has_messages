@@ -40,7 +40,7 @@ class MessageRecipient < ActiveRecord::Base
   delegate  :sender, :subject, :body, :recipients, :to, :cc, :bcc, :created_at,
               :to => :message
   
-  named_scope :visible, :conditions => {:hidden_at => nil}
+  scope :visible, :conditions => {:hidden_at => nil}
   
   # Defines actions for the recipient
   state_machine :state, :initial => :unread do
