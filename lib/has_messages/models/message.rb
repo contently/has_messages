@@ -27,9 +27,13 @@
 # * +unhide+ - Makes the message visible again
 class Message < ActiveRecord::Base
   belongs_to  :sender, :polymorphic => true
+  belongs_to  :topic, :polymorphic => true
   belongs_to  :original_message, :class_name => 'Message'
   has_many    :recipients, :class_name => 'MessageRecipient', :order => 'kind DESC, position ASC', :dependent => :destroy
   
+  scope :with_topic, lambda { |topic| where :topic_id => topic.id, :topic_type => topic.class }
+  scope :with_receiver, lambda { |receiver| join(:recipients).merge(MessageRecipient.with_receiver(receiver)) }
+
   validates_presence_of :state, :sender_id, :sender_type
   
   attr_accessible :subject, :body, :to, :cc, :bcc
@@ -42,13 +46,13 @@ class Message < ActiveRecord::Base
   state_machine :state, :initial => :unsent do
     # Queues the message so that it's sent in a separate process
     event :queue do
-      transition :unsent => :queued, :if => :has_recipients?
+      transition :unsent => :queued #, :if => :has_recipients?
     end
     
     # Sends the message to all of the recipients as long as at least one
     # recipient has been added
     event :deliver do
-      transition [:unsent, :queued] => :sent, :if => :has_recipients?
+      transition [:unsent, :queued] => :sent #, :if => :has_recipients?
     end
   end
   

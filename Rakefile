@@ -6,7 +6,7 @@ require 'rake/gempackagetask'
 
 spec = Gem::Specification.new do |s|
   s.name              = 'has_messages'
-  s.version           = '0.4.1'
+  s.version           = '0.4.2'
   s.platform          = Gem::Platform::RUBY
   s.summary           = 'Demonstrates a reference implementation for sending messages between users in ActiveRecord'
   s.description       = s.summary
