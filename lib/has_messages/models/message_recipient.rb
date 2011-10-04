@@ -40,7 +40,7 @@ class MessageRecipient < ActiveRecord::Base
   before_destroy :reorder_positions
   
   # Make this class look like the actual message
-  delegate  :sender, :subject, :body, :recipients, :to, :cc, :bcc, :created_at, :thread,
+  delegate  :sender, :subject, :body, :recipients, :to, :cc, :bcc, :created_at, :thread, :topic,
               :to => :message
   
   scope :visible, :conditions => {:hidden_at => nil}
