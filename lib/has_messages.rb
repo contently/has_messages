@@ -69,6 +69,10 @@ module HasMessages
       messages.with_state(:unsent)
     end
 
+    def unread_messages
+      received_messages.with_state(:unread)
+    end
+
     # Composed messages that have already been sent.  These consists of all
     # messages that are currently in the "queued" or "sent" states.
     def sent_messages
