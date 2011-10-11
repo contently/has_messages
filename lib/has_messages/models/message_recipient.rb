@@ -34,7 +34,7 @@ class MessageRecipient < ActiveRecord::Base
 
   validates_presence_of :message_id, :kind, :state, :receiver_id, :receiver_type
   
-  attr_protected :state, :position, :hidden_at
+  #attr_protected :state, :position, :hidden_at
   
   before_create :set_position
   before_destroy :reorder_positions
