@@ -106,7 +106,7 @@ class MessageRecipient < ActiveRecord::Base
     
     # Sets the position of the current recipient based on existing recipients
     def set_position
-      if last_recipient = message.recipients.find(:first, :conditions => {:kind => kind}, :order => 'position DESC')
+      if last_recipient = MessageRecipient.find(:first, :conditions => {:kind => kind, :message_id => message_id}, :order => 'position DESC')
         self.position = last_recipient.position + 1
       else
         self.position = 1
