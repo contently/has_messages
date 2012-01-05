@@ -28,6 +28,8 @@
 class Message < ActiveRecord::Base
   belongs_to  :sender, :polymorphic => true
   belongs_to  :topic, :polymorphic => true
+  belongs_to  :backup_topic, :polymorphic => true
+
   belongs_to  :original_message, :class_name => 'Message'
   has_many    :recipients, :class_name => 'MessageRecipient', :order => 'kind DESC, position ASC', :dependent => :destroy
   
