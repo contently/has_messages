@@ -29,7 +29,7 @@ class MessageRecipient < ActiveRecord::Base
   belongs_to  :message
   belongs_to  :receiver, :polymorphic => true
   
-  scope :with_receiver, lambda { |receiver| where :receiver_id => receiver.id, :receiver_type => receiver.class }
+  scope :with_receiver, lambda { |receiver| where(:receiver_id => receiver.id, :receiver_type => receiver.class, :hidden_at => nil).joins(:message).merge(Message.sent) }
   scope :with_topic, lambda { |topic| includes(:message).merge(Message.with_topic(topic)) }
 
   validates_presence_of :message_id, :kind, :state, :receiver_id, :receiver_type

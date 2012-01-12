@@ -34,7 +34,9 @@ class Message < ActiveRecord::Base
   has_many    :recipients, :class_name => 'MessageRecipient', :order => 'kind DESC, position ASC', :dependent => :destroy
   
   scope :with_topic, lambda { |topic| where :topic_id => topic.id, :topic_type => topic.class }
-  scope :with_receiver, lambda { |receiver| join(:recipients).merge(MessageRecipient.with_receiver(receiver)) }
+  scope :with_receiver, lambda { |receiver| joins(:recipients).merge(MessageRecipient.with_receiver(receiver)) }
+
+  scope :sent, where(:state => :sent)
 
   validates_presence_of :state, :sender_id, :sender_type
   
