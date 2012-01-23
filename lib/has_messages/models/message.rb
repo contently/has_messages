@@ -142,6 +142,8 @@ class Message < ActiveRecord::Base
           
           recipients.delete(*removed_recipients) if removed_recipients.any?
           new_receivers.each {|receiver| self.recipients.create!(:receiver => receiver, :kind => kind)}
+
+          self.recipients.create!(:receiver => sender, :kind => :sender, :state => :read)
         end
         
         @receivers = nil
