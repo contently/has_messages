@@ -2,6 +2,8 @@ require 'state_machine'
 
 # Adds a generic implementation for sending messages between users
 module HasMessages
+  MESSAGE_TOPIC_FIELD_DELIMITER = "-"
+
   module MacroMethods
     # Creates the following message associations:
     # * +messages+ - Messages that were composed and are visible to the owner.
@@ -89,6 +91,10 @@ module HasMessages
 
     def unread_topical_messages_for(receiver)
       topical_messages_for(receiver, :unread)
+    end
+
+    def message_topic_field
+      "#{self.class.to_s}#{HasMessages::MESSAGE_TOPIC_FIELD_DELIMITER}#{self.id}"
     end
   end
 end
