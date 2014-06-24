@@ -31,16 +31,14 @@ class Message < ActiveRecord::Base
   belongs_to  :backup_topic, :polymorphic => true
 
   belongs_to  :original_message, :class_name => 'Message'
-  has_many    :recipients, :class_name => 'MessageRecipient', :order => 'kind DESC, position ASC', :dependent => :destroy
+  has_many    :recipients, -> { order('kind DESC, position ASC') }, :class_name => 'MessageRecipient', :dependent => :destroy
   
-  scope :with_topic, lambda { |topic| where :topic_id => topic.id, :topic_type => topic.class }
-  scope :with_receiver, lambda { |receiver| joins(:recipients).merge(MessageRecipient.with_receiver(receiver)) }
+  scope :with_topic, ->(topic) { where :topic_id => topic.id, :topic_type => topic.class }
+  scope :with_receiver, ->(receiver) { joins(:recipients).merge(MessageRecipient.with_receiver(receiver)) }
 
-  scope :sent, where(:state => :sent)
+  scope :sent, -> { where(:state => :sent) }
 
   validates_presence_of :state, :sender_id, :sender_type
-  
-  attr_accessible :subject, :body, :to, :cc, :bcc
   
   after_save :update_recipients
   

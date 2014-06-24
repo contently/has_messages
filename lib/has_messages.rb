@@ -38,27 +38,22 @@ module HasMessages
     #  user = User.find(123)
     #  user.sent_messages
     def has_messages
-      has_many  :messages,
+      has_many  :messages, -> { where(:hidden_at => nil).order('messages.created_at DESC') },
                   :as => :sender,
-                  :class_name => 'Message',
-                  :conditions => {:hidden_at => nil},
-                  :order => 'messages.created_at DESC'
-      has_many  :received_messages,
+                  :class_name => 'Message'
+      has_many  :received_messages, -> { includes('message')
+                    .where('message_recipients.hidden_at IS NULL AND messages.state = ?', 'sent')
+                    .order('messages.created_at DESC') },
                   :as => :receiver,
-                  :class_name => 'MessageRecipient',
-                  :include => :message,
-                  :conditions => ['message_recipients.hidden_at IS NULL AND messages.state = ?', 'sent'],
-                  :order => 'messages.created_at DESC'
+                  :class_name => 'MessageRecipient'
 
       include HasMessages::HasMessagesInstanceMethods
     end
 
     def acts_as_message_topic
-      has_many  :topical_messages,
+      has_many  :topical_messages, -> { order('messages.created_at DESC').where(:hidden_at => nil) },
                   :as => :topic,
-                  :class_name => 'Message',
-                  :conditions => {:hidden_at => nil},
-                  :order => 'messages.created_at DESC'  
+                  :class_name => 'Message'
 
       include HasMessages::ActsAsMessageTopicInstanceMethods
     end
