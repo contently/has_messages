@@ -1,27 +1,27 @@
 # Represents a recipient on a message.  The kind of recipient (to, cc, or bcc) is
 # determined by the +kind+ attribute.
-# 
+#
 # == States
 #
 # Recipients can be in 1 of 2 states:
 # * +unread+ - The message has been sent, but not yet read by the recipient.  This is the *initial* state.
 # * +read+ - The message has been read by the recipient
-# 
+#
 # == Interacting with the message
-# 
+#
 # In order to perform actions on the message, such as viewing, you should always
 # use the associated event action:
 # * +view+ - Marks the message as read by the recipient
-# 
+#
 # == Hiding messages
-# 
+#
 # Although you can delete a recipient, it will also delete it from everyone else's
 # message, meaning that no one will know that person was ever a recipient of the
 # message.  Instead, you can change the *visibility* of the message.  Messages
 # have 1 of 2 states that define its visibility:
 # * +visible+ - The message is visible to the recipient
 # * +hidden+ - The message is hidden from the recipient
-# 
+#
 # The visibility of a message can be changed by running the associated action:
 # * +hide+ -Hides the message from the recipient
 # * +unhide+ - Makes the message visible again
@@ -119,7 +119,7 @@ class MessageRecipient < ActiveRecord::Base
 
   # Sets the position of the current recipient based on existing recipients
   def set_position
-    if last_recipient = MessageRecipient.find(:first, :conditions => {:kind => kind, :message_id => message_id}, :order => 'position DESC')
+    if last_recipient = MessageRecipient.where(:kind => kind, :message_id => message_id).order('position DESC').first
       self.position = last_recipient.position + 1
     else
       self.position = 1
