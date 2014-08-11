@@ -100,6 +100,10 @@ module HasMessages
       topical_messages_for(receiver, :unread)
     end
 
+    def mark_topical_messages_read_for(receiver)
+      MessageRecipient.where(message_id: self.topical_messages).with_receiver(receiver).update_all(state: "read")
+    end
+
     def message_topic_field
       "#{self.class.to_s}#{HasMessages::MESSAGE_TOPIC_FIELD_DELIMITER}#{self.id}"
     end
