@@ -131,7 +131,7 @@ class MessageRecipient < ActiveRecord::Base
     if position
       position = self.position
       update_attribute(:position, nil)
-      self.class.update_all('position = (position - 1)', ['message_id = ? AND kind = ? AND position > ?', message_id, kind, position])
+      self.class.where('message_id = ? AND kind = ? AND position > ?', message_id, kind, position).update_all(position: position - 1)
     end
   end
 end
