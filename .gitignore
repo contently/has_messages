@@ -4,3 +4,6 @@ rdoc
 test/app_root/log
 test/app_root/script
 .project
+.idea
+.idea/*
+
