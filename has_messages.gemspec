@@ -17,18 +17,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Demonstrates a reference implementation for sending messages between users in ActiveRecord}
   s.test_files = ["test/functional/has_messages_test.rb", "test/unit/message_recipient_test.rb", "test/unit/message_test.rb"]
 
-  if s.respond_to? :specification_version then
-    s.specification_version = 3
-
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<state_machine>, [">= 0.7.0"])
-      s.add_runtime_dependency(%q<kaminari>, [">= 0.14.1"])
-    else
-      s.add_dependency(%q<state_machine>, [">= 0.7.0"])
-      s.add_runtime_dependency(%q<kaminari>, [">= 0.14.1"])
-    end
-  else
-    s.add_dependency(%q<state_machine>, [">= 0.7.0"])
-    s.add_runtime_dependency(%q<kaminari>, [">= 0.14.1"])
-  end
+  s.add_dependency(%q<state_machine>, [">= 0.7.0"])
+  s.add_dependency(%q<kaminari>, [">= 0.14.1"])
+  s.add_dependency(%q<paranoia>, ["~> 2.0.2"])
 end
