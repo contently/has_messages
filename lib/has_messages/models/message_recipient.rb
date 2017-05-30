@@ -130,8 +130,9 @@ class MessageRecipient < ActiveRecord::Base
   def reorder_positions
     if position
       position = self.position
-      update_attribute(:position, nil)
-      self.class.update_all('position = (position - 1)', ['message_id = ? AND kind = ? AND position > ?', message_id, kind, position])
+      if self.update!(position: nil)
+        self.class.update_all('position = (position - 1)', ['message_id = ? AND kind = ? AND position > ?', message_id, kind, position])
+      end
     end
   end
 end
