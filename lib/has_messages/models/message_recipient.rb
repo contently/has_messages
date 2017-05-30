@@ -36,8 +36,8 @@ class MessageRecipient < ActiveRecord::Base
 
   #attr_protected :state, :position, :hidden_at
 
-  before_create :set_position
-  before_destroy :reorder_positions
+  #before_create :set_position
+  #before_destroy :reorder_positions
 
   # Make this class look like the actual message
   delegate :sender, :subject, :body, :recipients, :to, :cc, :bcc, :created_at, :thread, :topic,
@@ -118,20 +118,21 @@ class MessageRecipient < ActiveRecord::Base
   end
 
   # Sets the position of the current recipient based on existing recipients
-  def set_position
-    if last_recipient = MessageRecipient.where(:kind => kind, :message_id => message_id).order('position DESC').first
-      self.position = last_recipient.position + 1
-    else
-      self.position = 1
-    end
-  end
+  #def set_position
+    #if last_recipient = MessageRecipient.where(:kind => kind, :message_id => message_id).order('position DESC').first
+      #self.position = last_recipient.position + 1
+    #else
+      #self.position = 1
+    #end
+  #end
 
   # Reorders the positions of the message's recipients
-  def reorder_positions
-    if position
-      position = self.position
-      update_attribute(:position, nil)
-      self.class.where('message_id = ? AND kind = ? AND position > ?', message_id, kind, position).update_all(position: position - 1)
-    end
-  end
+  #def reorder_positions
+    #if position
+      #position = self.position
+      #if self.update!(position: nil)
+        #self.class.where('message_id = ? AND kind = ? AND position > ?', message_id, kind, position).update_all(position: position - 1)
+      #end
+    #end
+  #end
 end
