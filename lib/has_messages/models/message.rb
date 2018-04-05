@@ -33,7 +33,7 @@ class Message < ActiveRecord::Base
   belongs_to  :original_message, :class_name => 'Message'
   has_many    :recipients, -> { order('kind DESC') }, :class_name => 'MessageRecipient', :dependent => :destroy
 
-  scope :with_topic, ->(topic) { where :topic_id => topic.id, :topic_type => topic.class }
+  scope :with_topic, ->(topic) { where :topic_id => topic.id, :topic_type => "#{topic.class}" }
   scope :with_receiver, ->(receiver) { joins(:recipients).merge(MessageRecipient.with_receiver(receiver)) }
 
   scope :sent, -> { where(:state => :sent) }
